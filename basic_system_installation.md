@@ -112,7 +112,7 @@ Set your desired locale:
 	vim /etc/locale.conf
 		LANG=en_GB.UTF-8
 
-Konfigure your keyboard layout (mine is adapted to polish-programmer keyboard):
+Configure your keyboard layout (mine is adapted to polish-programmer keyboard):
 
 	vim /etc/vconsole.conf
 		KEYMAP=pl
@@ -121,7 +121,7 @@ Konfigure your keyboard layout (mine is adapted to polish-programmer keyboard):
 
 Set your hostname:
 
-  vim /etc/hostname
+	vim /etc/hostname
 
 Create your user (in my case the home dir has not created automatically):
 
