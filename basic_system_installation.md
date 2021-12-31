@@ -236,6 +236,6 @@ Reboot the system. Enable only UEFI boot in BIOS and set BIOS password so evil m
 
 	sbctl status
 	  Installed:	✓ sbctl is installed
-	  Owner GUID:	MY_GUID
+	  Owner GUID:	YOUR_GUID
 	  Setup Mode:	✓ Disabled
 	  Secure Boot:	✓ Enabled
