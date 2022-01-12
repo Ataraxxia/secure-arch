@@ -228,6 +228,25 @@ Configure dracut to know where are signing keys:
 		uefi_secureboot_cert="/usr/share/secureboot/keys/db/db.pem"
 		uefi_secureboot_cert="/usr/share/secureboot/keys/db/db.key"
 
+We also need to fix sbctl's pacman hook. Creating the following file will overshadow the real one:
+
+	vim /etc/pacman.d/hooks/zz-sbctl.hook
+		[Trigger]
+		Type = Path
+		Operation = Install
+		Operation = Upgrade
+		Operation = Remove
+		Target = boot/*
+		Target = efi/*
+		Target = usr/lib/modules/*/vmlinuz
+		Target = usr/lib/initcpio/*
+		Target = usr/lib/**/efi/*.efi*
+
+		[Action]
+		Description = Signing EFI binaries...
+		When = PostTransaction
+		Exec = /usr/bin/sh -c "/usr/bin/sbctl sign /efi/EFI/Linux/*.efi && /usr/sbin/sbctl sign /efi/EFI/BOOT/* && /usr/sbin/sbctl sign /efi/EFI/systemd/*"
+
 Enroll previously generated keys:
 
 	sbctl enroll-keys
