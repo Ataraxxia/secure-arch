@@ -81,7 +81,7 @@ _In the next step it is recommended to install CPU microcode package. Depending 
 
 My pacstrap presents as follows:
 
-	pacstrap /mnt base linux linux-firmware sudo vim lvm2 dracut sbsigntools iwd git efibootmgr binutils YOUR_UCODE_PACKAGE
+	pacstrap /mnt base linux linux-firmware YOUR_UCODE_PACKAGE sudo vim lvm2 dracut sbsigntools iwd git efibootmgr binutils dhclient
 
 Generate fstab:
 
