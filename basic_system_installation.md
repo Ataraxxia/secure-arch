@@ -226,7 +226,7 @@ Configure dracut to know where are signing keys:
 
 	vim /etc/dracut.conf.d/secureboot.conf
 		uefi_secureboot_cert="/usr/share/secureboot/keys/db/db.pem"
-		uefi_secureboot_cert="/usr/share/secureboot/keys/db/db.key"
+		uefi_secureboot_key="/usr/share/secureboot/keys/db/db.key"
 
 We also need to fix sbctl's pacman hook. Creating the following file will overshadow the real one:
 
