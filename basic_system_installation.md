@@ -194,10 +194,6 @@ Generate your image, first check your kernel version and use that as an argment 
 	ls /lib/modules # You should see single directory with your kernel version
 	dracut --uefi --kver FULL_NAME_OF_DIRECTORY_FROM_PREVIOUS_COMMAND
 
-Depending on your setup, before reboot you may want to install at least dhclient to your system:
-
-	pacman -S dhclient
-
 Now you can reboot and log into your system.
 
 ## SecureBoot
