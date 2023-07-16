@@ -228,6 +228,10 @@ Generate your image by re-installing `linux` package and making sure the hooks w
 
 Now you can reboot and log into your system.
 
+:exclamation: :exclamation: :exclamation: **Compatilibity thing I noticed** :exclamation: :exclamation: :exclamation:
+
+Some (older?) platforms can ignore entries by efibootmgr all together and just look for `EFI\BOOT\bootx64.efi`, in that case you may generate your UKI directly to that directory and under that name. It's very important that the name is also `bootx64.efi`.
+
 ## SecureBoot
 
 At this point you should enable Setup Mode for SecureBoot in your BIOS, and erase your existing keys (it may spare you setting attributes for efi vars in OS). If your system does not offer reverting to default keys (useful if you want to install windows later), you should backup them, though this will not be described here.
