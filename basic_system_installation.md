@@ -179,7 +179,7 @@ And the removal script:
 		Target = usr/lib/modules/*/pkgbase
 		
 		[Action]
-		Description = Updating linux initcpios (with dracut!)...
+		Description = Updating linux EFI image
 		When = PostTransaction
 		Exec = /usr/local/bin/dracut-install.sh
 		Depends = dracut
@@ -195,7 +195,7 @@ And for removal:
 		Target = usr/lib/modules/*/pkgbase
 		
 		[Action]
-		Description = Removing linux initcpios...
+		Description = Removing linux EFI image
 		When = PreTransaction
 		Exec = /usr/local/bin/dracut-remove.sh
 		NeedsTargets
