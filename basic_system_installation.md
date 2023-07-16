@@ -1,4 +1,4 @@
-# Introduction
+ # Introduction
 
 This section of guide will tell you how to install fully encrypted base system with SecureBoot enabled. This specific guide uses Unified Boot Image for booting and therefore there is no need for software like GRUB.
 
@@ -149,14 +149,14 @@ Create dracut scripts that will hook into pacman:
 
 		#!/usr/bin/env bash
 
-		mkdir -p /boot/EFI/Linux
+		mkdir -p /boot/efi/EFI/Linux
   
 		while read -r line; do
 			if [[ "$line" == 'usr/lib/modules/'+([^/])'/pkgbase' ]]; then
 				kver="${line#'usr/lib/modules/'}"
 				kver="${kver%'/pkgbase'}"
 		
-				dracut --force --uefi --kver "$kver" /boot/EFI/Linux/arch-linux.efi
+				dracut --force --uefi --kver "$kver" /boot/efi/EFI/Linux/arch-linux.efi
 			fi
 		done
 
@@ -165,7 +165,7 @@ And the removal script:
 	vim /usr/local/bin/dracut-remove.sh
 
 		#!/usr/bin/env bash
-	 	rm -f /boot/EFI/Linux/arch-linux.efi
+	 	rm -f /boot/efi/EFI/Linux/arch-linux.efi
 
  Now the actual hooks, first for the install and upgrade:
 
@@ -250,7 +250,7 @@ Check your status, setup mode should be enabled (You can do that in BIOS):
 Create keys and sign binaries:
 
 	sbctl create-keys
-	sbctl sign -s /efi/EFI/Linux/arch-linux.efi #it should be single file with name verying from kernel version
+	sbctl sign -s /boot/efi/EFI/Linux/arch-linux.efi #it should be single file with name verying from kernel version
 
 Configure dracut to know where are signing keys:
 
@@ -275,7 +275,7 @@ We also need to fix sbctl's pacman hook. Creating the following file will oversh
 		[Action]
 		Description = Signing EFI binaries...
 		When = PostTransaction
-		Exec = /usr/bin/sbctl sign /efi/EFI/Linux/arch-linux.efi
+		Exec = /usr/bin/sbctl sign /boot/efi/EFI/Linux/arch-linux.efi
 
 Enroll previously generated keys (drop microsoft option if you don't want their keys):
 
