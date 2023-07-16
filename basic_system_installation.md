@@ -167,6 +167,10 @@ And the removal script:
 		#!/usr/bin/env bash
 	 	rm -f /boot/efi/EFI/Linux/arch-linux.efi
 
+Make those scripts executable:
+
+	chmod +x /usr/local/bin/dracut-*
+
  Now the actual hooks, first for the install and upgrade:
 
 	 vim /etc/pacman.d/hooks/90-dracut-install.hook
