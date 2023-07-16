@@ -149,14 +149,14 @@ Create dracut scripts that will hook into pacman:
 
 		#!/usr/bin/env bash
 
-		mkdir -p /efi/EFI/Linux
+		mkdir -p /boot/EFI/Linux
   
 		while read -r line; do
 			if [[ "$line" == 'usr/lib/modules/'+([^/])'/pkgbase' ]]; then
 				kver="${line#'usr/lib/modules/'}"
 				kver="${kver%'/pkgbase'}"
 		
-				dracut --force --uefi --kver "$kver" /efi/EFI/Linux/arch-linux.efi
+				dracut --force --uefi --kver "$kver" /boot/EFI/Linux/arch-linux.efi
 			fi
 		done
 
@@ -165,7 +165,7 @@ And the removal script:
 	vim /usr/local/bin/dracut-remove.sh
 
 		#!/usr/bin/env bash
-	 	rm -f /efi/EFI/Linux/arch-linux.efi
+	 	rm -f /boot/EFI/Linux/arch-linux.efi
 
  Now the actual hooks, first for the install and upgrade:
 
