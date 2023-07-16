@@ -71,7 +71,7 @@ Configuring LVM and formatting root partition:
 After all is done we need to mount our drives:
 
 	mount /dev/vg/root /mnt
-	mkdir /mnt/boot/efi
+	mkdir -p /mnt/boot/efi
 	mount /dev/nvme0n1p1 /mnt/boot/efi
 
 ## System bootstraping
