@@ -235,7 +235,7 @@ Configuring SecureBoot is easy with sbctl:
 
 	pacman -S sbctl
 
-Check your status, setup mode should be enabled:
+Check your status, setup mode should be enabled (You can do that in BIOS):
 
 	sbctl status
 	  Installed:      ✘ Sbctl is not installed
