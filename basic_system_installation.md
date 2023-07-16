@@ -8,7 +8,6 @@ __Check this list before starting!__
 - Your computer allows for enrollment of your own secureboot keys
 - Your computer does not have manufacturer's backdoors
 - ~~You DO NOT need dualboot with windows~~ You can choose whether you want Microsoft CA when enrolling keys
-- You do not requrie dedicated SWAP partition
 
 If you are not interested in SecureBoot, you can just skip last section of this document.
 
