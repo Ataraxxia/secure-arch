@@ -32,7 +32,7 @@ When your installer has booted, especially on laptop, you may want to enable WiF
 
 Following example assumes you have a nvme drive. Your drive may as well report as /dev/sdX.
 
-You can use your favoruite tool, like fstab or have minimal GUI with cgdisk. Propsed partioning schema presents as follows:
+You can use your favoruite tool, that supports creating the GPT partiton, for example `gdisk`:
 
 	+----------------------+----------------------+----------------------+----------------------+
 	| EFI system partition |         Logical volume 1                                           |
@@ -51,15 +51,15 @@ My partition sizes and used partition codes look like this:
 
 The lack of SWAP partition is intentional; if you need it, you can configure SWAP as file in your filesystem later.
 
+We also need to format EFI partition:
+
+	mkfs.fat -F32 /dev/nvme0n1p1
+
 Now we can create encrypted volume and open it (--perf options are optional and recommended for SSD):
 
 	cryptsetup luksFormat --type luks2 /dev/nvme0n1p2
 	cryptsetup open --perf-no_read_workqueue --perf-no_write_workqueue --persistent /dev/nvme0n1p2 cryptlvm
 
-
-We also need to format EFI partition:
-
-	mkfs.fat -F32 /dev/nvme0n1p1
 
 Configuring LVM and formatting root partition:
 
@@ -81,7 +81,7 @@ _In the next step it is recommended to install CPU microcode package. Depending 
 
 My pacstrap presents as follows:
 
-	pacstrap /mnt base linux linux-firmware YOUR_UCODE_PACKAGE sudo vim lvm2 dracut sbsigntools iwd git efibootmgr binutils dhclient
+	pacstrap /mnt base linux linux-firmware YOUR_UCODE_PACKAGE sudo vim lvm2 dracut sbsigntools iwd git efibootmgr binutils dhcpcd
 
 Generate fstab:
 
@@ -137,42 +137,68 @@ Add your user to sudo:
 
 	usermod -aG wheel YOUR_NAME
 
-## Configuring bootloader
+ Enable some basic systemd units:
 
-Install systemd-boot to EFI partition
+ 	systemctl enable dhcpcd
+  	systemctl enable iwd
 
-	bootctl install # it will find /efi on its own
+## Creating Unified Kernel Image and configuring boot entry
 
-Install dracut-uefi-hook (dracut-hook-uefi is also a viable option), currently available only from AUR:
+Create dracut scripts that will hook into pacman:
 
-	su - YOUR_NAME 
-	sudo pacman -S fakeroot
-	mkdir repos && cd repos
-	git clone https://aur.archlinux.org/dracut-uefi-hook.git
-	cd dracut*
+	vim /usr/local/bin/dracut-install.sh
 
-Build and install AUR package:
+		#!/usr/bin/env bash
 
-	makepkg -si
+		mkdir -p /efi/EFI/Linux
+  
+		while read -r line; do
+			if [[ "$line" == 'usr/lib/modules/'+([^/])'/pkgbase' ]]; then
+				kver="${line#'usr/lib/modules/'}"
+				kver="${kver%'/pkgbase'}"
+		
+				dracut --force --uefi --kver "$kver" /efi/EFI/Linux/arch-linux.efi
+			fi
+		done
 
-After it is done, return to root:
+And the removal script:
 
-	exit
+	vim /usr/local/bin/dracut-remove.sh
 
-Add pacman hook that will update bootctl on systemd-boot package upgrade:
+		#!/usr/bin/env bash
+	 	rm -f /efi/EFI/Linux/arch-linux.efi
 
-	mkdir /etc/pacman.d/hooks
-	vim /etc/pacman.d/hooks/998-systemd-boot.hook
+ Now the actual hooks, first for the install and upgrade:
+
+	 vim /etc/pacman.d/hooks/90-dracut-install.hook
+  
 		[Trigger]
-		Type = Package
+		Type = Path
 		Operation = Install
 		Operation = Upgrade
-		Target = systemd
-	
+		Target = usr/lib/modules/*/pkgbase
+		
 		[Action]
-		Description = Updating systemd-boot
+		Description = Updating linux initcpios (with dracut!)...
 		When = PostTransaction
-		Exec = /usr/bin/bootctl update;
+		Exec = /usr/local/bin/dracut-install.sh
+		Depends = dracut
+		NeedsTargets
+
+And for removal:
+
+	vim /etc/pacman.d/hooks/60-dracut-remove.hook
+ 
+		[Trigger]
+		Type = Path
+		Operation = Remove
+		Target = usr/lib/modules/*/pkgbase
+		
+		[Action]
+		Description = Removing linux initcpios...
+		When = PreTransaction
+		Exec = /usr/local/bin/dracut-remove.sh
+		NeedsTargets
 
 Check UUID of your encrypted volume and write it to file you will edit next:
 
@@ -189,10 +215,15 @@ Create file with flags:
 		compress="zstd"
 		hostonly="no"
 
-Generate your image, first check your kernel version and use that as an argment in dracut --kver. The reason for that is often times kernel installed from pacstrap is a bit newer from what you have on your USB in chrooted enviroment:
+Generate your image by re-installing `linux` package and making sure the hooks work properly:
 
-	ls /lib/modules # You should see single directory with your kernel version
-	dracut --uefi --kver FULL_NAME_OF_DIRECTORY_FROM_PREVIOUS_COMMAND
+	pacman -S linux
+
+ You should have `arch-linux.efi` within your `/efi/EFI/Linux/`
+
+ Now you only have to add UEFI boot entry:
+
+	efibootmgr --create --disk /dev/nvme0n1 --part 1 --label "Arch Linux" --loader 'EFI\Linux\arch-linux.efi' --unicode
 
 Now you can reboot and log into your system.
 
@@ -214,9 +245,7 @@ Check your status, setup mode should be enabled:
 Create keys and sign binaries:
 
 	sbctl create-keys
-	sbctl sign -s /efi/EFI/BOOT/BOOTx64.EFI
-	sbctl sign -s /efi/EFI/Linux/*.efi #it should be single file with name verying from kernel version
-	sbctl sign -s /efi/EFI/systemd/systemd-bootx64.efi
+	sbctl sign -s /efi/EFI/Linux/arch-linux.efi #it should be single file with name verying from kernel version
 
 Configure dracut to know where are signing keys:
 
@@ -241,9 +270,9 @@ We also need to fix sbctl's pacman hook. Creating the following file will oversh
 		[Action]
 		Description = Signing EFI binaries...
 		When = PostTransaction
-		Exec = /usr/bin/sh -c "/usr/bin/sbctl sign /efi/EFI/Linux/*.efi && /usr/sbin/sbctl sign /efi/EFI/BOOT/* && /usr/sbin/sbctl sign /efi/EFI/systemd/*"
+		Exec = /usr/bin/sbctl sign /efi/EFI/Linux/arch-linux.efi
 
-Enroll previously generated keys (drop microsoft option if you don't want their CA):
+Enroll previously generated keys (drop microsoft option if you don't want their keys):
 
 	sbctl enroll-keys --microsoft
 
