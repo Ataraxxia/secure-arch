@@ -167,9 +167,10 @@ And the removal script:
 		#!/usr/bin/env bash
 	 	rm -f /boot/efi/EFI/Linux/arch-linux.efi
 
-Make those scripts executable:
+Make those scripts executable and create pacman's hook directory:
 
 	chmod +x /usr/local/bin/dracut-*
+ 	mkdir /etc/pacman.d/hooks
 
  Now the actual hooks, first for the install and upgrade:
 
