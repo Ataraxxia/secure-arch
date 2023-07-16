@@ -223,8 +223,8 @@ Generate your image by re-installing `linux` package and making sure the hooks w
  Now you only have to add UEFI boot entry and create an order of booting:
 
 	efibootmgr --create --disk /dev/nvme0n1 --part 1 --label "Arch Linux" --loader 'EFI\Linux\arch-linux.efi' --unicode
- 	efibootmgr # Check if you have left over UEFI entries, remove them with efibootmgr -b INDEX -B and note down Arch index
-        efibootmgr -o ARCH_INDEX_FROM_PREVIOUS_COMMAND # 0 or whatever number your Arch entry shows as
+	efibootmgr 		# Check if you have left over UEFI entries, remove them with efibootmgr -b INDEX -B and note down Arch index
+	efibootmgr -o ARCH_INDEX_FROM_PREVIOUS_COMMAND # 0 or whatever number your Arch entry shows as
 
 Now you can reboot and log into your system.
 
