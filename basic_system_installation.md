@@ -34,13 +34,13 @@ Following example assumes you have a nvme drive. Your drive may as well report a
 You can use your favoruite tool, that supports creating the GPT partiton, for example `gdisk`:
 
 	+----------------------+----------------------+----------------------+----------------------+
-	| EFI system partition |         Logical volume 1                                           |
+	| EFI system partition |         LVM                                                        |
 	|                      |                                                                    |
 	| /efi                 |         /                                                          |
 	|                      |                                                                    |
-	|                      |         /dev/vg/root                                               |
-	| /dev/nvme0n1p1       |----------------------+----------------------+----------------------+
-	| unencrypted          | /dev/nvme0n1p2 encrypted using LVM on LUKS2                        |
+	| /dev/nvme0n1p1       |         /dev/vg/root                                               |
+	|                      |----------------------+----------------------+----------------------+
+	| unencrypted          | /dev/nvme0n1p2 encrypted using LUKS2                               |
 	+----------------------+--------------------------------------------------------------------+
 
 My partition sizes and used partition codes look like this:
