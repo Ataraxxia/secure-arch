@@ -124,9 +124,7 @@ Set your hostname:
 
 Create your user (in my case the home dir has not created automatically):
 
-	useradd YOUR_NAME
-	mkdir /home/YOUR_NAME
-	chown YOUR_NAME:YOUR_NAME /home/YOUR_NAME
+	useradd -m YOUR_NAME
 	passwd YOUR_NAME
 
 Add your user to sudo:
