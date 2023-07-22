@@ -122,7 +122,7 @@ Set your hostname:
 
 	vim /etc/hostname
 
-Create your user (in my case the home dir has not created automatically):
+Create your user:
 
 	useradd -m YOUR_NAME
 	passwd YOUR_NAME
