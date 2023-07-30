@@ -145,7 +145,63 @@ Reload Sway with `Shift + mod + c` to see your new status bar.
 
 ### Lockscreen
 
+Never leave your station unlocked.
 
+Install required packets:
+
+```
+pacman -S swaylock swayidle
+```
+
+Get yourself some nice lockscreen image and save it on your computer. I'll be reffering to mine as `~/Pictures/lockscreen.jpg`
+
+Edit your sway config, I'm leaving the auto-sleep option commented out since I always put my system to sleep manually. Adjust the times (in seconds) as needed:
+
+```
+vim ~/.config/sway/config
+
+exec swayidle -w \
+         timeout 300 'swaylock -e -f -i ~/Pictures/lockscreen.jpg' \
+#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -e -f -i ~/Pictures/lockscreen.jpg'
+```
+
+Add option for manual locking, in my case I'm going for `mod + L`, same as on Windows:
+
+```
+vim ~/.config/sway/config
+
+### Key bindings
+#
+# Basics:
+#
+    # Lock screen
+    bindsym $mod+l exec swaylock -e -f -i ~/Pictures/lockscreen.jpg -C ~/.config/swaylock/config
+```
+
+This keystroke collides with another one, so comment them out. Don't worry, you can still change focus with arrow keys:
+
+```
+vim ~/.config/sway/config
+
+# Comment those out:
+#bindsym $mod+$left focus left
+#bindsym $mod+$down focus down
+#bindsym $mod+$up focus up
+#bindsym $mod+$right focus right
+```
 
 ### Background
 
+Same as with lockscreen, get yourself nice wallpaper and save it to `~/Pictures/bg.png`
+
+Then change the path in sway's config file:
+
+```
+vim ~/.config/sway/config
+
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg ~/Pictures/bg.png fill
+```
