@@ -155,14 +155,14 @@ pacman -S swaylock swayidle
 
 Get yourself some nice lockscreen image and save it on your computer. I'll be reffering to mine as `~/Pictures/lockscreen.jpg`
 
-Edit your sway config, I'm leaving the auto-sleep option commented out since I always put my system to sleep manually. Adjust the times (in seconds) as needed:
+Edit your sway config, the power off/on option will just turn off your display after longer period. Adjust the times (in seconds) as needed. The last option ensures our computer is locked upon entering suspended state.
 
 ```
 vim ~/.config/sway/config
 
 exec swayidle -w \
          timeout 300 'swaylock -e -f -i ~/Pictures/lockscreen.jpg' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep 'swaylock -e -f -i ~/Pictures/lockscreen.jpg'
 ```
 
