@@ -42,4 +42,17 @@ and personally I like to keep it that way. This means you will log via terminal 
 
 https://depau.github.io/sway-cheatsheet/
 
+### Terminal
+
 ### Popup command window
+
+https://aur.archlinux.org/packages/sway-launcher-desktop
+
+### Status bar
+
+Modifying the swaybar
+
+### Lockscreen
+
+### Background
+
