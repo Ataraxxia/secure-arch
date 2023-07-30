@@ -38,11 +38,48 @@ sway
 
 and personally I like to keep it that way. This means you will log via terminal and decide whether you want to jump into the UI or not.
 
+Copy `config` file to your user's directory so you can enable your own changes:
+
+```
+mkdir .config/sway
+cp /etc/sway/config .config/sway/
+```
+
 ### Keys cheatsheet
 
 https://depau.github.io/sway-cheatsheet/
 
 ### Terminal
+
+Install your preffered terminal emulator (foot, alacritty, whatever you want), I'm going to use alacritty for this example:
+
+```
+pacman -S alacritty
+```
+
+Then edit your config file and change terminal executable
+
+```
+vim ~/.config/sway/config
+
+# Your preferred terminal emulator
+set $term alacritty
+```
+
+Reload your sway config `Shift + mod + c`, now you can open terminal by pressing `mod + Enter`
+
+Personally I like my terminal windows a bit transparent, so let's do that:
+
+```
+mkdir ~/.config/alacritty/
+vim ~/.config/alacritty/alacritty.yml
+
+window:
+  opacity: 0.75
+
+```
+
+Changes should be visible immediately.
 
 ### Popup command window
 
