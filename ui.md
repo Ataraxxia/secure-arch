@@ -205,3 +205,11 @@ vim ~/.config/sway/config
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg ~/Pictures/bg.png fill
 ```
+
+### Audio
+
+Install pulseaudio package and reboot, it should work out of the box:
+
+```
+pacman -S pulseaudio
+```
