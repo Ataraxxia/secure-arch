@@ -1,6 +1,6 @@
 # Introduction
 
-In this part I will present you two options for user interface.
+In this part I will present you two options for user interface. Both use Wayland.
 
 ## GNOME
 
@@ -24,7 +24,7 @@ Reboot.
 Sway is a tiling window manager. It's like i3 but instead of Xorg it uses Wayland for display server protocol. From my expirience at this moment everything I need works, 
 like screensharing on various platforms ( web google meet, teams, zoom ), and even Steam and GoG games.
 
-For sway we needt to install few extra packets:
+For sway we need to install few extra packets:
 
 ```
 pacman -S sway dmenu polkit swaybg waybar xorg-xwayland xdg-utils fakeroot pulseaudio
