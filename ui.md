@@ -27,7 +27,7 @@ like screensharing on various platforms ( web google meet, teams, zoom ), and ev
 For sway we needt to install few extra packets:
 
 ```
-pacman -S sway dmenu polkit swaybg waybar xorg-xwayland xdg-utils fakeroot
+pacman -S sway dmenu polkit swaybg waybar xorg-xwayland xdg-utils fakeroot pulseaudio
 ```
 
 This basically gives you a starting base. You can start the UI manually with:
@@ -204,12 +204,4 @@ vim ~/.config/sway/config
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg ~/Pictures/bg.png fill
-```
-
-### Audio
-
-Install pulseaudio package and reboot, it should work out of the box:
-
-```
-pacman -S pulseaudio
 ```
