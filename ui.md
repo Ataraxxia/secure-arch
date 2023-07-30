@@ -27,7 +27,7 @@ like screensharing on various platforms ( web google meet, teams, zoom ), and ev
 For sway we needt to install few extra packets:
 
 ```
-pacman -S sway dmenu polkit swaybg waybar xorg-xwayland
+pacman -S sway dmenu polkit swaybg waybar xorg-xwayland xdg-utils fakeroot
 ```
 
 This basically gives you a starting base. You can start the UI manually with:
@@ -83,7 +83,35 @@ Changes should be visible immediately.
 
 ### Popup command window
 
-https://aur.archlinux.org/packages/sway-launcher-desktop
+Create direcotory for your AUR repos and clone sway launcher there:
+
+```
+mkdir -p ~/repos/AUR/
+cd ~/repos/AUR
+git clone https://aur.archlinux.org/sway-launcher-desktop.git
+```
+
+Install `fzf` dependency and font-awesome for icons, then build and install sway launcher:
+
+```
+cd sway-launcher-desktop
+pacman -S fzf ttf-font-awesome
+makepkg --install
+```
+
+Configure sway to start using that as our launcher:
+
+```
+vim ~/.config/sway/config
+
+set $menu dmenu_path | dmenu | xargs swaymsg exec -- # Comment out this line
+
+# Put those lines below the commented out one
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
+set $menu exec $term --class=launcher -e /usr/bin/sway-launcher-desktop
+
+```
+
 
 ### Status bar
 
