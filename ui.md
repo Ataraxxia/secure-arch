@@ -115,9 +115,37 @@ set $menu exec $term --class=launcher -e /usr/bin/sway-launcher-desktop
 
 ### Status bar
 
-Modifying the swaybar
+Lot's of example are presented on the waybar github page https://github.com/Alexays/Waybar/wiki/Examples
+
+The easiest way to start is to just grab an example and modify it to your needs.
+
+Firt, create your waybar config directory:
+
+```
+mkdir ~/.config/waybar
+```
+
+Then, into that directory, download your choosen `config` and `style.css` files from the examples page.
+
+We need to tell Sway to start using waybar, so edit your config file:
+
+```
+vim ~/.config/sway/config
+
+# Comment out or delete entire bar section
+bar {
+  (...)
+}
+
+# Put this
+bar swaybar_command waybar
+```
+
+Reload Sway with `Shift + mod + c` to see your new status bar.
 
 ### Lockscreen
+
+
 
 ### Background
 
