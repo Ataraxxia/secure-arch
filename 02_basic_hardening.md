@@ -63,24 +63,6 @@ systemctl enable --now nftables
 nft list ruleset
 ```
 
-## NTP Client
-
-Synchronising time may not seem important, but it's crucial especially when it involves certificate validation (for example used in HTTPS). With minimal configuration it can be done once and pretty much forgotten about.
-
-Install ntp client:
-
-```
-pacman -S ntp
-```
-
-Prefferably you should use NTP servers closest to you, so google their addresses and put them in your `/etc/ntp.conf`. Then enable the NTP daemon service and verify:
-
-```
-systemctl enable --now ntpd
-
-ntpq -p
-```
-
 ## Kernel parameters
 
 Since firewall allows ICMP traffic, it may be a good idea to disable some network options. Edit your `/etc/sysctl.d/90-network.conf`:
