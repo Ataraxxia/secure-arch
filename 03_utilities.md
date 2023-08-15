@@ -94,6 +94,10 @@ If you're using remote printing server, you can set it in `/etc/cups/client.conf
 CUPS can run in the background all the time, but I choose to start it manually when I need it with:
 
 ```
+systemctl enable --now cups
+
+OR
+
 systemctl start cups
 ```
 
