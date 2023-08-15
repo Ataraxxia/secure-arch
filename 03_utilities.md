@@ -89,7 +89,7 @@ Thankfully this is pretty straightforward. Install CUPS package:
 pacman -S cups
 ```
 
-If you're using remote printing server, you can set it in ``, that way you will see remote printers but will not see your localy added devices.
+If you're using remote printing server, you can set it in `/etc/cups/client.conf`, that way you will see remote printers but will not see your localy added devices.
 
 CUPS can run in the background all the time, but I choose to start it manually when I need it with:
 
