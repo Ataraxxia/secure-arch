@@ -13,8 +13,55 @@ vim /etc/dhcpcd.conf
   nohook resolv.conf
 ```
 
-Now enable the systemd-resolved service:
+Edit `/etc/systemd/resolved.conf` and uncomment following options. You can set whatever DNS servers you want. I'm using Quad9 for primary resolvers and Cloudflare for fallback.
 
+```
+vim /etc/systemd/resolved.conf
+
+  DNS=9.9.9.9 2620:fe::9
+  FallbackDNS=1.1.1.1 2606:4700:4700::64
+  #Domains=
+  DNSSEC=yes
+  DNSOverTLS=yes
+  #MulticastDNS=yes
+  #LLMNR=yes
+  #Cache=yes
+  #CacheFromLocalhost=no
+  #DNSStubListener=yes
+  #DNSStubListenerExtra=
+  #ReadEtcHosts=yes
+  #ResolveUnicastSingleLabel=no
+  #StaleRetentionSec=0
+```
+
+
+Now enable the systemd-resolved service:
 ```
 systemctl enable --now systemd-resolved
 ```
+
+There's a chance that systemd-resolved took care of `/etc/resolv.conf` but verify that it points to `127.0.0.53`:
+
+```
+vim /etc/resolv.conf
+  nameserver 127.0.0.53
+```
+
+Finally, verify with `resolvectl`:
+
+```
+$ resolvectl status
+
+Global
+           Protocols: +LLMNR +mDNS +DNSOverTLS DNSSEC=yes/supported
+    resolv.conf mode: stub
+  Current DNS Server: 2620:fe::9
+         DNS Servers: 9.9.9.9 2620:fe::9
+Fallback DNS Servers: 1.1.1.1 2606:4700:4700::64
+
+Link 2 (wlan0)
+    Current Scopes: LLMNR/IPv4 LLMNR/IPv6 mDNS/IPv4 mDNS/IPv6
+         Protocols: -DefaultRoute +LLMNR +mDNS +DNSOverTLS DNSSEC=yes/supported
+```
+
+Additional verification can be done with `dig` and `tcpdump`.
