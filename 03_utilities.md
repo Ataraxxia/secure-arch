@@ -65,3 +65,35 @@ Link 2 (wlan0)
 ```
 
 Additional verification can be done with `dig` and `tcpdump`.
+
+
+## Mirror list
+
+It's prefferable to use known, local mirrors. Choose yours at https://archlinux.org/mirrorlist/ and edit your `/etc/pacman.d/mirrorlist` 
+
+## Disable SWAP
+
+Most of the time you have no need for SWAP. Disable it entinerly or in event you really need it, turn down the swapiness.
+
+```
+vim /etc/sysctl.d/swapiness.conf
+
+  vm.swappiness = 10
+```
+
+## CUPS
+
+Thankfully this is pretty straightforward. Install CUPS package:
+
+```
+pacman -S cups
+```
+
+If you're using remote printing server, you can set it in ``, that way you will see remote printers but will not see your localy added devices.
+
+CUPS can run in the background all the time, but I choose to start it manually when I need it with:
+
+```
+systemctl start cups
+```
+
