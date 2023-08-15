@@ -97,3 +97,27 @@ CUPS can run in the background all the time, but I choose to start it manually w
 systemctl start cups
 ```
 
+## Docker
+
+If you're using NFTables make sure to install `iptables-nft` package first to replace base iptables package. Otherwise skip this step.
+
+```
+pacman -S iptables-nft
+```
+
+On ArchLinux installing docker is as simple as:
+
+```
+pacman -S docker docker-compose
+```
+
+You can choose to either enable docker service all the time or just have it run manually every time you use Docker:
+
+```
+systemctl enable --now docker
+
+OR
+
+systemctl start docker
+```
+
