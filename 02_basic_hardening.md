@@ -11,6 +11,12 @@ I hope you've managed to end up with reasonably secure laptop that is still conv
 * VPN's
 * Secure backup with public cloud
 
+## YouTube version of this tutorial
+
+I recorded a YT series where I follow all of these instructions. The installation there is performed on a real-life hardware. Check it out if you get stuck.
+
+[Secure ArchLinux Installation part 3 - Basic Hardening](https://www.youtube.com/watch?v=ivXTv5ate-M)
+
 ## Firewall
 
 I'm goning to use nftables. Most distros started switching to it and it streamlines persistence compared to iptables.
