@@ -142,8 +142,7 @@ Add your user to sudo:
 
  Enable some basic systemd units:
 
- 	systemctl enable dhcpcd
-  	systemctl enable iwd
+ 	systemctl enable dhcpcd iwd
 
 ## Creating Unified Kernel Image and configuring boot entry
 
