@@ -60,10 +60,10 @@ We also need to format EFI partition:
 
 	mkfs.fat -F32 /dev/nvme0n1p1
 
-Now we can create encrypted volume and open it (--perf options are optional and recommended for SSD):
+Now we can create encrypted volume and open it (--allow-discards and --perf options are optional and recommended for SSD):
 
 	cryptsetup luksFormat --type luks2 /dev/nvme0n1p2
-	cryptsetup open --perf-no_read_workqueue --perf-no_write_workqueue --persistent /dev/nvme0n1p2 cryptlvm
+	cryptsetup open --perf-no_read_workqueue --allow-discards --perf-no_write_workqueue --persistent /dev/nvme0n1p2 cryptlvm
 
 
 Configuring LVM and formatting root partition:
@@ -144,6 +144,10 @@ Add your user to sudo:
 
  	systemctl enable dhcpcd
   	systemctl enable iwd
+   
+ Enable fstrim if you have SSD and and used --allowed-discards option:
+ 
+   	systemctl enable fstrim.timer
 
 ## Creating Unified Kernel Image and configuring boot entry
 
@@ -212,10 +216,10 @@ Check UUID of your encrypted volume and write it to file you will edit next:
 
 	blkid -s UUID -o value /dev/nvme0n1p2 >> /etc/dracut.conf.d/cmdline.conf
 
-Edit the file and fill with with kernel arguments:
+Edit the file and fill with with kernel arguments (rd.luks.options=discard is for SSD/NVMe drives):
 
 	vim /etc/dracut.conf.d/cmdline.conf
-		kernel_cmdline="rd.luks.uuid=luks-YOUR_UUID rd.lvm.lv=vg/root root=/dev/mapper/vg-root rootfstype=ext4 rootflags=rw,relatime"
+		kernel_cmdline="rd.luks.uuid=luks-YOUR_UUID rd.lvm.lv=vg/root rd.luks.options=discard root=/dev/mapper/vg-root rootfstype=ext4 rootflags=rw,relatime"
 
 Create file with flags:
 
