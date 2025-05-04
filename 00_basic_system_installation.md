@@ -82,6 +82,11 @@ After all is done we need to mount our drives:
 
 ## System bootstraping
 
+It seems pacman now requires PGP shenaningans, so first of all I had to execute:
+
+        pacman-key --init
+	pacman-key --populate
+
 _In the next step it is recommended to install CPU microcode package. Depending on whether you have intel of amd you should apend intel-ucode or amd-ucode to your pacstrap_
 
 My pacstrap presents as follows:
