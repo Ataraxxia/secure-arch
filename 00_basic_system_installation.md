@@ -149,6 +149,7 @@ Add your user to sudo:
 
  	systemctl enable dhcpcd
   	systemctl enable iwd
+        systemctl enable fstrim.timer
 
 ## Creating Unified Kernel Image and configuring boot entry
 
