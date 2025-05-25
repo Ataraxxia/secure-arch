@@ -51,7 +51,7 @@ You can use your favoruite tool, that supports creating the GPT partiton, for ex
 
 My partition sizes and used partition codes look like this:
 
-	/dev/nvme0n1p1 - EFI - 512MB;				partition code EF00
+	/dev/nvme0n1p1 - EFI - 1024MB;				partition code EF00
 	/dev/nvme0n1p2 - encrypted LUKS - remaining space;	partition code 8309
 
 The lack of SWAP partition is intentional; if you need it, you can configure SWAP as file in your filesystem later.
@@ -63,7 +63,7 @@ We also need to format EFI partition:
 Now we can create encrypted volume and open it (--perf options are optional and recommended for SSD):
 
 	cryptsetup luksFormat --type luks2 /dev/nvme0n1p2
-	cryptsetup open --perf-no_read_workqueue --perf-no_write_workqueue --persistent /dev/nvme0n1p2 cryptlvm
+	cryptsetup open --persistent /dev/nvme0n1p2 cryptlvm
 
 
 Configuring LVM and formatting root partition:
@@ -166,7 +166,7 @@ Create dracut scripts that will hook into pacman:
 				kver="${line#'usr/lib/modules/'}"
 				kver="${kver%'/pkgbase'}"
 		
-				dracut --force --uefi --kver "$kver" /boot/efi/EFI/Linux/arch-linux.efi
+				dracut --force --uefi --kver "$kver" /boot/efi/EFI/Linux/bootx64.efi
 			fi
 		done
 
@@ -175,7 +175,7 @@ And the removal script:
 	vim /usr/local/bin/dracut-remove.sh
 
 		#!/usr/bin/env bash
-	 	rm -f /boot/efi/EFI/Linux/arch-linux.efi
+	 	rm -f /boot/efi/EFI/Linux/bootx64.efi
 
 Make those scripts executable and create pacman's hook directory:
 
@@ -233,11 +233,11 @@ Generate your image by re-installing `linux` package and making sure the hooks w
 
 	pacman -S linux
 
- You should have `arch-linux.efi` within your `/efi/EFI/Linux/`
+ You should have `bootx64.efi` within your `/efi/EFI/Linux/`
 
  Now you only have to add UEFI boot entry and create an order of booting:
 
-	efibootmgr --create --disk /dev/nvme0n1 --part 1 --label "Arch Linux" --loader 'EFI\Linux\arch-linux.efi' --unicode
+	efibootmgr --create --disk /dev/nvme0n1 --part 1 --label "Arch Linux" --loader 'EFI\Linux\bootx64.efi' --unicode
 	efibootmgr 		# Check if you have left over UEFI entries, remove them with efibootmgr -b INDEX -B and note down Arch index
 	efibootmgr -o ARCH_INDEX_FROM_PREVIOUS_COMMAND # 0 or whatever number your Arch entry shows as
 
@@ -265,7 +265,7 @@ Check your status, setup mode should be enabled (You can do that in BIOS):
 Create keys and sign binaries:
 
 	sbctl create-keys
-	sbctl sign -s /boot/efi/EFI/Linux/arch-linux.efi #it should be single file with name verying from kernel version
+	sbctl sign -s /boot/efi/EFI/Linux/bootx64.efi #it should be single file with name verying from kernel version
 
 Configure dracut to know where are signing keys:
 
@@ -290,7 +290,7 @@ We also need to fix sbctl's pacman hook. Creating the following file will oversh
 		[Action]
 		Description = Signing EFI binaries...
 		When = PostTransaction
-		Exec = /usr/bin/sbctl sign /boot/efi/EFI/Linux/arch-linux.efi
+		Exec = /usr/bin/sbctl sign /boot/efi/EFI/Linux/bootx64.efi
 
 Enroll previously generated keys (drop microsoft option if you don't want their keys):
 
