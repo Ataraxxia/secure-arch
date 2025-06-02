@@ -16,6 +16,7 @@ If you are not interested in SecureBoot, you can just skip last section of this 
 I recorded a YT series where I follow all of these instructions. The installation there is performed on a real-life hardware. Check it out if you get stuck.
 
 [Secure ArchLinux Installation 2025](https://youtu.be/RxzfwZ2SaEs?si=iGHcegNs8zHbih1l)
+
 [Secure ArchLinux Installation Tutorial part 1 - Base System](https://www.youtube.com/watch?v=4xeNL7nJLrM) - OLD
 
 ## Preparing USB and booting the installer
