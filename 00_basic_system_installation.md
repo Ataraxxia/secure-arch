@@ -62,10 +62,10 @@ We also need to format EFI partition:
 
 	mkfs.fat -F32 /dev/nvme0n1p1
 
-Now we can create encrypted volume and open it (--perf options are optional and recommended for SSD):
+Now we can create encrypted volume and open it:
 
 	cryptsetup luksFormat --type luks2 /dev/nvme0n1p2
-	cryptsetup open --persistent /dev/nvme0n1p2 cryptlvm
+	cryptsetup open --allow-discards --persistent /dev/nvme0n1p2 cryptlvm
 
 
 Configuring LVM and formatting root partition:
